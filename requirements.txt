@@ -3,3 +3,4 @@ tabulate
 flask-mail
 requests
 gunicorn
+python-dotenv

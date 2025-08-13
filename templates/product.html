@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+<style>
+    .slide {
+        transition: opacity 0.5s ease-in-out;
+    }
+
+    .slide-hidden {
+        opacity: 0;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .slide-visible {
+        opacity: 1;
+    }
+
+    .slide-content {
+        background: rgba(0, 0, 0, 0.5);
+    }
+</style>
+
+{% block content %}
+<!-- Slider Container -->
+
+<!-- End of Slider Container -->
+
+<!-- Product Grid -->
+<div id="app">
+    <div class="row">
+        {% for product in products %}
+        <div class="col-8 col-sm-4 col-md-3 col-lg-2 mb-4">
+            <div class="card h-100 border-0 rounded-lg shadow-sm">
+                <div class="position-relative">
+                    <img src="{{ product.image }}" class="card-img-top rounded-lg product-image"
+                        alt="{{ product.title }}">
+                    <a href="#" class="position-absolute top-0 right-0 p-2 text-muted"
+                        style="top: 10px; right: 10px; z-index: 1;">
+                        <i class="far fa-bookmark fa-lg"></i>
+                    </a>
+                </div>
+                <div class="card-body">
+                    <h1 class="card-text"><span class="text-danger">${{ product['price'] }}</span></h1>
+                    <p class="card-text font-weight-bold product-title">{{ product['title'] }}</p>
+                    <p class="card-text product-description">{{ product['description'] }}</p>
+                </div>
+                <div class="card-footer bg-transparent border-0 pt-0">
+                    <button class="btn btn-block btn-secondary custom-btn" @click='addToCart({{product}})'>
+                        Add to Cart</button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block custom_script %}
+
+{% endblock %}

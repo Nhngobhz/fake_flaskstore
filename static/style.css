@@ -1,0 +1,74 @@
+/* static/style.css */
+
+/* Use the Inter font, a common choice for web design */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    background-color: #ececec; /* Light background color for the body */
+    ;
+}
+
+/* Custom card styling to match the reference image */
+.card {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Ensure the navbar brand is styled nicely */
+.navbar-brand {
+    letter-spacing: 2px;
+}
+
+.card-body {
+    padding-bottom: 0.5rem; /* Reduced padding at the bottom of the card body */
+}
+
+.card-text {
+    margin-bottom: 0.5rem; /* Reduced margin for all card text elements */
+}
+
+.card-footer {
+    padding-top: 0.5rem; /* Reduced padding at the top of the card footer */
+}
+.product-image {
+    width: 100%;
+    height: 250px; /* Or any fixed height you prefer */
+    object-fit: cover; /* This ensures the image covers the area without distortion */
+}
+.product-title {
+    display: -webkit-box;
+    line-clamp: 1; /* Limits the text to 2 lines */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Adds an ellipsis (...) if the text is truncated */
+    height: 3em; /* Sets a fixed height based on line-height, adjust if needed */
+}
+.product-description {
+    color: #888; /* A light gray color */
+    display: -webkit-box;
+    line-clamp: 0;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Adds an ellipsis (...) if the text is truncated */
+    height: 3em; /* Sets a fixed height based on line-height, adjust if needed */
+}
+.slide {
+    transition: opacity 0.5s ease-in-out;
+}
+.slide-hidden {
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+.slide-visible {
+    opacity: 1;
+}
+.slide-content {
+    background: rgba(0, 0, 0, 0.5);
+}

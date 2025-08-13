@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/static/favicon.png" type="image/png">
+    <title>GET•GOT - E-commerce</title>
+    <!-- Bootstrap 4.6 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+        xintegrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <div id="app">
+        <!-- Navbar/Header -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+            <div class="container">
+                <a class="navbar-brand font-weight-bold" href="/">GET•GOT</a>
+                <ul class="navbar-nav ml-4 mr-auto d-flex flex-row">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/product">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">About Us</a>
+                    </li>
+                </ul>
+                <a class="btn btn-outline-dark ml-lg-3" href="/cart">
+                    <i class="fas fa-shopping-cart mr-2"></i>
+                    Cart<span v-if="cart_list.length > 0">([[ cart_list.length ]])</span>
+                </a>
+            </div>
+        </nav>
+
+        <!-- Main Content Block -->
+        <div class="container my-5">
+            {% block content %}{% endblock %}
+        </div>
+
+        <!-- Footer -->
+        <footer class="bg-light text-center text-lg-start mt-auto">
+            <div class="container p-4">
+                <div class="row">
+                    <!-- About Section -->
+                    <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
+                        <h5 class="text-uppercase">GET • GOT</h5>
+                        <p>
+                            Providing the latest products for you. Shop our exclusive collections.
+                        </p>
+                    </div>
+
+                    <!-- Quick Links -->
+                    <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
+                        <h5 class="text-uppercase">Links</h5>
+                        <ul class="list-unstyled mb-0">
+                            <li><a href="/about" class="text-dark">About Us</a></li>
+                            <li><a href="/product" class="text-dark">Shop All</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Social Media -->
+                    <div class="col-lg-4 col-md-12 mb-4 mb-md-0">
+                        <h5 class="text-uppercase mb-2">Follow Us</h5>
+                        <ul class="list-unstyled d-flex justify-content-center align-items-center">
+                            <li class="mr-3">
+                                <a href="https://www.facebook.com" class="text-dark" target="_blank" rel="noopener">
+                                    <i class="fab fa-facebook fa-2x"></i>
+                                </a>
+                            </li>
+                            <li class="mr-3">
+                                <a href="https://x.com/home" class="text-dark" target="_blank" rel="noopener">
+                                    <i class="fab fa-twitter fa-2x"></i>
+                                </a>
+                            </li>
+                            <li class="mr-3">
+                                <a href="https://www.instagram.com" class="text-dark" target="_blank" rel="noopener">
+                                    <i class="fab fa-instagram fa-2x"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="text-center p-3 bg-dark text-white">
+                © 2025 GET • GOT. All rights reserved.
+            </div>
+        </footer>
+        <!-- Bootstrap and jQuery JS -->
+    </div>
+</body>
+{% include 'share/script.html' %}
+
+<script>
+
+    const { createApp } = Vue;
+    createApp({
+        delimiters: ['[[', ']]'],
+        data() {
+            return {
+                cart_list: JSON.parse(localStorage.getItem('cart_list')) || []
+            }
+        },
+        methods: {
+            addToCart(product) {
+                console.log('Product added to cart:', product);
+                // Check if product already exists in cart
+                const existingProductIndex = this.cart_list.findIndex(item => item.id === product.id);
+                if (existingProductIndex !== -1) {
+                    // If it exists, increment the quantity
+                    this.cart_list[existingProductIndex].quantity += 1;
+                } else {
+                    // If it doesn't exist, add it to the cart
+                    product.quantity = 1;
+                    this.cart_list.push(product);
+                }
+                localStorage.setItem('cart_list', JSON.stringify(this.cart_list));
+                Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: "Your work has been saved",
+                    showConfirmButton: false,
+                    timer: 1000
+                });
+            },
+
+            removeFromCart(index) {
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, delete it!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: "Deleted!",
+                            text: "Your file has been deleted.",
+                            icon: "success"
+                        });
+                        this.cart_list.splice(index, 1);
+                        localStorage.setItem('cart_list', JSON.stringify(this.cart_list));
+                    }
+                });
+
+            },
+            formatPrice(value) {
+                return value.toFixed(2);
+            },
+            getTotal() {
+                let total = 0;
+                this.cart_list.forEach(product => {
+                    total += product.price * product.quantity;
+                });
+                return total.toFixed(2); // Adding a fixed shipping cost of $5.00
+            },
+            addQty(index) {
+                this.cart_list[index].quantity++;
+                localStorage.setItem('cart_list', JSON.stringify(this.cart_list));
+            },
+            minusQty(index) {
+                if (this.cart_list[index].quantity > 1) {
+                    this.cart_list[index].quantity--;
+                    localStorage.setItem('cart_list', JSON.stringify(this.cart_list));
+                }
+
+            },
+            getTotalWithShipping() {
+                let total = this.getTotal();
+                if (isNaN(total)) {
+                    return '0.00'; // Return 0.00 if total is NaN
+                }
+                total = parseFloat(total) + 5.00; // Adding a fixed shipping cost of $5.00
+                return total; // Adding a fixed shipping cost of $5.00
+            },
+            truncate(text, length = 20) {
+                if (!text) return '';
+                return text.length > length ? text.slice(0, length) + '…' : text;
+            },
+            handleCheckout(event) {
+                if (this.cart_list.length === 0) {
+                    event.preventDefault();
+                }
+            }
+
+        }
+    }).mount('#app');
+</script>
+{% block custom_script %}
+
+{% endblock %}
+
+</html>

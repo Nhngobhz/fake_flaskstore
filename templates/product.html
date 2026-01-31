@@ -35,7 +35,7 @@
         <div class="col-8 col-sm-4 col-md-3 col-lg-2 mb-4">
             <div class="card h-100 border-0 rounded-lg shadow-sm">
                 <div class="position-relative">
-                    <img src="{{ product.image }}" class="card-img-top rounded-lg product-image"
+                    <img src="{{ url_for('static', filename='products/' + product.image) }}" class="card-img-top rounded-lg product-image"
                         alt="{{ product.title }}">
                     <a href="#" class="position-absolute top-0 right-0 p-2 text-muted"
                         style="top: 10px; right: 10px; z-index: 1;">
